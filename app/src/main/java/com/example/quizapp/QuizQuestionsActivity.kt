@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -21,12 +22,16 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var tv_progress:TextView;
     private lateinit var tvImageView:ImageView;
     private var SelectedOption:Int=0;
-    private var ReadyToNext:Boolean=false;
+    private var ReadyToNext: Boolean = false;
+    private var isDone:Boolean=false;
+    private var CountCorrectAnswers: Int = 0;
+    private var UserName:String?=null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_questions)
 
+        UserName=intent.getStringExtra(Constants.USER_NAME)
         tvImageView=findViewById(R.id.iv_image)
         tvOptionOne=findViewById(R.id.tv_option_one)
         tvOptionTwo=findViewById(R.id.tv_option_two)
@@ -42,17 +47,34 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
         tvOptionFour.setOnClickListener(this);
 
         assisnValuesToActivity();
-
         btnSubmit.setOnClickListener {
 
+            if(isDone){
+
+//                CountCorrectAnswers++;
+//                Log.d("score", CountCorrectAnswers.toString())
+                var Intent = Intent(this, ResultActivity::class.java);
+                Intent.putExtra(Constants.USER_NAME, UserName.toString())
+                Intent.putExtra(Constants.CORRECT_ANSWERS, CountCorrectAnswers)
+                Intent.putExtra(Constants.TOTAL_QUESTIONS, Constants.getQuestions().size)
+                startActivity(Intent);
+            }
             if (currentPosition <= Constants.getQuestions().size) {
 
-                if(SelectedOption !== Constants.getQuestions()[currentPosition -1].correctAnswer){
+                if(SelectedOption != Constants.getQuestions()[currentPosition -1].correctAnswer){
                     AnswerView(SelectedOption,R.drawable.wrong_option_border_bg)
-
+                }else{
+                    CountCorrectAnswers++;
+                    Log.d("score", CountCorrectAnswers.toString())
                 }
                 AnswerView(Constants.getQuestions()[currentPosition -1].correctAnswer,R.drawable.correct_option_border_bg)
-                btnSubmit.text = "GO TO NEXT QUESTION :) ";
+                if(currentPosition == Constants.getQuestions().size)
+                {
+                    btnSubmit.text="FINISH"
+                    isDone=true;
+                }else{
+                    btnSubmit.text = "GO TO NEXT QUESTION :) ";
+                }
                 if(ReadyToNext) {
                     currentPosition++;
                     assisnValuesToActivity();
@@ -60,7 +82,7 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
                 }
                 ReadyToNext=true;
 
-            }  else btnSubmit.text="FINISH";
+            };
         }
 
     }
@@ -85,8 +107,8 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun SelectOptionView(textView: TextView){
-        textView.background =
-            ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
+        textView.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
+
         textView.setTextColor(Color.parseColor("#202020"))
 
         when(textView.id){

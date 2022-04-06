@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.quizapp.Constants
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btn_start:Button
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this,"Please enter your name",Toast.LENGTH_SHORT).show()
             }else{
                 val intent = Intent(this, QuizQuestionsActivity::class.java);
+                intent.putExtra(Constants.USER_NAME,et_name.text.toString())
                 startActivity(intent)
                 finish() //close current activity
              }

@@ -5,12 +5,10 @@ import com.example.quizapp.R
 
 object Constants {
 
-    // TODO (STEP 1: Create a constant variables which we required in the result screen.)
-     // START
-    const val USER_NAME: String = "user_name"
-    const val TOTAL_QUESTIONS: String = "total_questions"
-    const val CORRECT_ANSWERS: String = "correct_answers"
-    // END
+    //for name of Extra :
+    const val USER_NAME:String="Saman";
+    const val TOTAL_QUESTIONS:String="TOTAL_QUESTIONS";
+    const val CORRECT_ANSWERS:String="CORRECT_ANSWERS";
 
     fun getQuestions(): ArrayList<Question> {
         val questionsList = ArrayList<Question>()
