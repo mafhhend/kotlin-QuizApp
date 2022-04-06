@@ -6,10 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import com.quizapp.Constants
 
@@ -23,10 +20,8 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var progressBar:ProgressBar;
     private lateinit var tv_progress:TextView;
     private lateinit var tvImageView:ImageView;
-
-    //    private var mCurrentPosition: Int = 1;
-    private var mSelectedOptionPosition: Int = 0;
-
+    private var SelectedOption:Int=0;
+    private var ReadyToNext:Boolean=false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +44,23 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
         assisnValuesToActivity();
 
         btnSubmit.setOnClickListener {
-            currentPosition++;
-            assisnValuesToActivity();
+
+            if (currentPosition <= Constants.getQuestions().size) {
+
+                if(SelectedOption !== Constants.getQuestions()[currentPosition -1].correctAnswer){
+                    AnswerView(SelectedOption,R.drawable.wrong_option_border_bg)
+
+                }
+                AnswerView(Constants.getQuestions()[currentPosition -1].correctAnswer,R.drawable.correct_option_border_bg)
+                btnSubmit.text = "GO TO NEXT QUESTION :) ";
+                if(ReadyToNext) {
+                    currentPosition++;
+                    assisnValuesToActivity();
+                    btnSubmit.text="SUBMIT";
+                }
+                ReadyToNext=true;
+
+            }  else btnSubmit.text="FINISH";
         }
 
     }
@@ -71,13 +81,43 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
 
     override fun onClick(v: View?) {
         resetSelectedOption()
-        val textViewSelected:TextView=(v as TextView);
-        textViewSelected.background =
+        SelectOptionView(v as TextView);
+    }
+
+    private fun SelectOptionView(textView: TextView){
+        textView.background =
             ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
-        textViewSelected.setTextColor(Color.parseColor("#202020"))
+        textView.setTextColor(Color.parseColor("#202020"))
+
+        when(textView.id){
+            R.id.tv_option_one->SelectedOption=1
+            R.id.tv_option_two->SelectedOption=2
+            R.id.tv_option_three->SelectedOption=3
+            R.id.tv_option_four->SelectedOption=4
+        }
+    }
+
+    private fun AnswerView(answer: Int, drawableView: Int) {
+        println("$answer");
+        when (answer) {
+            1 -> {
+                tvOptionOne.background = ContextCompat.getDrawable(this, drawableView)
+            }
+            2 -> {
+                tvOptionTwo.background = ContextCompat.getDrawable(this, drawableView)
+            }
+            3 -> {
+                tvOptionThree.background = ContextCompat.getDrawable(this, drawableView)
+            }
+            4 -> {
+                tvOptionFour.background = ContextCompat.getDrawable(this, drawableView)
+            }
+        }
     }
 
     private fun resetSelectedOption(){
+        ReadyToNext=false;
+        SelectedOption=0;
         val options = ArrayList<TextView>();
         options.add(0,tvOptionOne)
         options.add(1,tvOptionTwo)

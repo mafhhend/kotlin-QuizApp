@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, QuizQuestionsActivity::class.java);
                 startActivity(intent)
                 finish() //close current activity
-            }
+             }
         }
 
 
