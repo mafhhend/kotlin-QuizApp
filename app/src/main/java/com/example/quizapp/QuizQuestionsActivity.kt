@@ -49,10 +49,14 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
         assisnValuesToActivity();
         btnSubmit.setOnClickListener {
 
+            if(SelectedOption === 0) return@setOnClickListener;
             if(isDone){
 
-//                CountCorrectAnswers++;
-//                Log.d("score", CountCorrectAnswers.toString())
+                if(SelectedOption == Constants.getQuestions()[currentPosition-1].correctAnswer)
+                {
+                    CountCorrectAnswers++;
+                    Log.d("score", CountCorrectAnswers.toString())
+                }
                 var Intent = Intent(this, ResultActivity::class.java);
                 Intent.putExtra(Constants.USER_NAME, UserName.toString())
                 Intent.putExtra(Constants.CORRECT_ANSWERS, CountCorrectAnswers)
@@ -63,9 +67,6 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
 
                 if(SelectedOption != Constants.getQuestions()[currentPosition -1].correctAnswer){
                     AnswerView(SelectedOption,R.drawable.wrong_option_border_bg)
-                }else{
-                    CountCorrectAnswers++;
-                    Log.d("score", CountCorrectAnswers.toString())
                 }
                 AnswerView(Constants.getQuestions()[currentPosition -1].correctAnswer,R.drawable.correct_option_border_bg)
                 if(currentPosition == Constants.getQuestions().size)
@@ -76,6 +77,11 @@ class QuizQuestionsActivity : AppCompatActivity(),View.OnClickListener {
                     btnSubmit.text = "GO TO NEXT QUESTION :) ";
                 }
                 if(ReadyToNext) {
+                    if(SelectedOption == Constants.getQuestions()[currentPosition-1].correctAnswer)
+                    {
+                        CountCorrectAnswers++;
+                        Log.d("score", CountCorrectAnswers.toString())
+                    }
                     currentPosition++;
                     assisnValuesToActivity();
                     btnSubmit.text="SUBMIT";

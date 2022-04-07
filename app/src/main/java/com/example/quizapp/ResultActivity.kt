@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -21,6 +22,11 @@ class ResultActivity : AppCompatActivity() {
         btn_finish = findViewById(R.id.btn_finish)
         tv_name.text=intent.getStringExtra(Constants.USER_NAME)
         tv_score.text="Your Score is $score out of $maximumScore"
+
+        findViewById<Button>(R.id.btn_finish).setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
 
     }
 }
